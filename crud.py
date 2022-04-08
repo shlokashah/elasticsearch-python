@@ -121,11 +121,14 @@ def update():
 	# updation with search
 	try:
 		doc = es.search(index=index_name, body=query)
-		doc_body = doc["hits"]["hits"][0]["_source"]
-		doc_id = doc["hits"]["hits"][0]["_id"]
 
-		doc_body["price"] = 50
-		es.update(index=index_name, id=doc_id, body={"doc": doc_body})
+		for i in range(len(doc["hits"]["hits"])):
+			doc_body = doc["hits"]["hits"][i]["_source"]
+			doc_id = doc["hits"]["hits"][i]["_id"]
+
+			doc_body["price"] = 50
+			es.update(index=index_name, id=doc_id, body={"doc": doc_body})
+			print("Document updating success!")
 	except Exception as err:
 		print("Error in updating with search: ", err)
 
@@ -137,8 +140,9 @@ def update():
 			doc_body = doc["_source"]
 			doc_id = doc["_id"]
 
-		doc_body["price"] = 150
-		es.update(index=index_name, id=doc_id, body={"doc": doc_body})
+			doc_body["price"] = 150
+			es.update(index=index_name, id=doc_id, body={"doc": doc_body})
+			print("Document updating success!")
 	except Exception as err:
 		print("Error in updating with scan: ", err)
 
